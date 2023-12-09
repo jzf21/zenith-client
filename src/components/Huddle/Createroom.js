@@ -1,28 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 //import MeetRoom from "@/pages/_meetroom";
-import  {useRouter} from "next/router";
+import { useRouter } from "next/router";
+import {
+  createNewHuddleRoom,
+  createHuddleAccessToken,
+} from "../services/huddle";
+
+import { useRoom } from "@huddle01/react/hooks";
 
 const Createroom = () => {
-    const router = useRouter();
+  const router = useRouter();
+
+  const [newRoomId, setNewRoomId] = useState(null);
+
+  const { joinRoom, leaveRoom } = useRoom({
+    onJoin: () => {
+      console.log("Joined the room");
+    },
+    onLeave: () => {
+      console.log("Left the room");
+    },
+  });
+
   const createRoom = async () => {
     try {
-      const response = await axios.post(
-        "https://api.huddle01.com/api/v1/create-iframe-room",
-        {
-          title: "Huddle01-Test",
-          hostWallets: [process.env.NEXT_PUBLIC_HOST],
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
-          },
-        }
-      );
-      console.log(response.data); 
-    //   router.push("/_meetroom")
-      // Log the response data if needed
+      const newRoomId = await createNewHuddleRoom();
+
+      setNewRoomId(newRoomId);
     } catch (error) {
       console.error("Error creating room:", error);
     }
@@ -30,7 +35,22 @@ const Createroom = () => {
 
   return (
     <div>
-        <button onClick={createRoom} >Create Room</button>
+      <button onClick={createRoom}>Create Room</button>
+      <p>Room ID: {newRoomId}</p>
+      <div>
+        <button
+          onClick={async () => {
+            const newHuddleAccessToken = await createHuddleAccessToken(
+              newRoomId
+            );
+            console.log(newHuddleAccessToken);
+            await joinRoom(newRoomId, newHuddleAccessToken);
+          }}
+        >
+          Join Room
+        </button>
+        <button onClick={() => leaveRoom(newRoomId)}>Leave Room</button>
+      </div>
     </div>
   );
 };

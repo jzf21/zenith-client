@@ -2,7 +2,7 @@ import { AccessToken, Role } from "@huddle01/server-sdk/auth";
 
 export default function handler(req, res) {
     const accessToken = new AccessToken({
-  apiKey,
+  apiKey:process.env.API_KEY,
   roomId: res.data.roomId,
   role: Role.HOST,
   permissions: {
