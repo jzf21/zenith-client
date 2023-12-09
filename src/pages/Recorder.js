@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import lighthouse from "@lighthouse-web3/sdk";
 
 import { FaStop, FaPlay, FaPause } from "react-icons/fa";
 
@@ -74,7 +75,38 @@ export default function Recorder() {
     };
     setAudioChunks(localAudioChunks);
   };
+const uploadFile = async(file) =>{
+  console.log(file)
+    // Push file to lighthouse node
+    // Both file and folder are supported by upload function
+    // Third parameter is for multiple files, if multiple files are to be uploaded at once make it true
+    // Fourth parameter is the deal parameters, default null
+    const output = await lighthouse.upload(
+      file,
+      "fcacc1e4.664b3e079f5445a991389485b98459de",
+      false,
+      null,
+      progressCallback
+    );
+    console.log('File Status:', output)
+    /*
+      output:
+        data: {
+          Name: "filename.txt",
+          Size: 88000,
+          Hash: "QmWNmn2gr4ZihNPqaC5oTeePsHvFtkWNpjY3cD6Fd5am1w"
+        }
+      Note: Hash in response is CID.
+    */
 
+      console.log('Visit at https://gateway.lighthouse.storage/ipfs/' + output.data.Hash)
+  }
+ 
+  const progressCallback = (progressData) => {
+    let percentageDone =
+      100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
+    console.log(percentageDone);
+  };
   const stopRecording = async () => {
     setRecordingStatus("inactive");
     //stops the recording instance
@@ -137,6 +169,9 @@ export default function Recorder() {
       >
         Save Audio to Lighthouse
       </button>
+      <div className="App">
+        <input onChange={(e) => uploadFile(e.target.files)} type="file" />
+      </div>
     </div>
   );
 }
