@@ -1,0 +1,23 @@
+{
+  "name": "zenith-eth-client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@huddle01/react": "^1.0.0-alpha.57",
+    "@huddle01/server-sdk": "^1.0.0-alpha.25",
+    "react": "^18",
+    "react-dom": "^18",
+    "next": "14.0.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
+  }
+}
