@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-//import MeetRoom from "@/pages/_meetroom";
 import { useRouter } from "next/router";
 import {
   createNewHuddleRoom,
   createHuddleAccessToken,
-} from "../services/huddle";
-
+  startHuddleRecording,
+  stopHuddleRecording,
+  createHuddleRecorder,
+} from "../../services/huddle";
 import { useRoom } from "@huddle01/react/hooks";
+import axios from "axios";
 
 const Createroom = () => {
   const router = useRouter();
 
-  const [newRoomId, setNewRoomId] = useState(null);
+  const [roomId, setRoomId] = useState("");
+  const [huddleRecorder, setHuddleRecorder] = useState(null);
 
   const { joinRoom, leaveRoom } = useRoom({
     onJoin: () => {
@@ -26,30 +28,50 @@ const Createroom = () => {
   const createRoom = async () => {
     try {
       const newRoomId = await createNewHuddleRoom();
-
-      setNewRoomId(newRoomId);
+      setRoomId(newRoomId);
+      console.log({ roomId });
     } catch (error) {
       console.error("Error creating room:", error);
     }
   };
 
   return (
-    <div>
+    <div className="mt-20">
       <button onClick={createRoom}>Create Room</button>
-      <p>Room ID: {newRoomId}</p>
-      <div>
+      <p>Room ID: {roomId}</p>
+      <div className="flex flex-col gap-4">
         <button
           onClick={async () => {
-            const newHuddleAccessToken = await createHuddleAccessToken(
-              newRoomId
-            );
-            console.log(newHuddleAccessToken);
-            await joinRoom(newRoomId, newHuddleAccessToken);
+            const response = await axios.get("/api/huddle/" + roomId);
+            console.log(response.data.accessToken );
+            await joinRoom(roomId, response.data.accessToken);
           }}
         >
           Join Room
         </button>
-        <button onClick={() => leaveRoom(newRoomId)}>Leave Room</button>
+        <button onClick={() => leaveRoom(roomId)}>Leave Room</button>
+        <button
+          onClick={() => {
+            const newHuddleRecorder = createHuddleRecorder();
+            setHuddleRecorder(newHuddleRecorder);
+          }}
+        >
+          create huddleRecorder
+        </button>
+        <button
+          onClick={() => {
+            startHuddleRecording(huddleRecorder, roomId);
+          }}
+        >
+          Start record
+        </button>
+        <button
+          onClick={() => {
+            stopHuddleRecording(huddleRecorder, newRoomId);
+          }}
+        >
+          Stop record
+        </button>
       </div>
     </div>
   );
