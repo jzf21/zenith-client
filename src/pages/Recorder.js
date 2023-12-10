@@ -124,9 +124,10 @@ const uploadFile = async(file) =>{
   };
 
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-4 rounded-t-md bg-gray-700 text-white">
-      <p className="text-2xl">Recording Details</p>
-      <div className="flex flex-row gap-4 text-2xl">
+    <div className="w-full flex flex-col justify-center items-center gap-4 rounded-t-md text-white">
+      <p className="text-zenith-indigo text-2xl ">RECORDING DETAILS</p>   
+      <div className="h-1 w-1/5 bg-zenith-lav"></div>
+      <div className="flex flex-row gap-4 text-2xl pt-5">
         <button>
           <FaPlay />
         </button>
@@ -139,7 +140,7 @@ const uploadFile = async(file) =>{
       </div>
       <div className="audio-controls">
         {!permission ? (
-          <button onClick={getMicrophonePermission} type="button">
+          <button onClick={getMicrophonePermission} type="button" className="stroke-zenith-lav p-2">
             Get Microphone
           </button>
         ) : null}
@@ -165,7 +166,7 @@ const uploadFile = async(file) =>{
       <button
         onClick={() => {
           saveAudio();
-        }}
+        }} className="bg-zenith-lav p-2"
       >
         Save Audio to Lighthouse
       </button>
