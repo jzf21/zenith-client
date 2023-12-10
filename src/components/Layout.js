@@ -10,7 +10,7 @@ const DefaultLayout = ({ children }) => {
   return (
     <>
       <Navbar />
-      {children}
+      <div className="pt-20">{children}</div>
     </>
   );
 };

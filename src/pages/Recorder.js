@@ -133,7 +133,7 @@ export default function Recorder() {
   };
 
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-4 rounded-t-md bg-gray-700 text-white">
+    <div className="w-full flex flex-col justify-center items-center gap-4 rounded-t-md bg-zenith-black text-white">
       <p className="text-2xl">Recording Details</p>
       <div className="flex flex-row gap-4 text-2xl">
         <button>
@@ -178,7 +178,7 @@ export default function Recorder() {
       >
         Save Audio to Lighthouse
       </button>
-      <div className="p-4 bg-purple-500 text-xl">
+      <div className="p-4 bg-zenith-lav text-xl">
         Upload File to Lighthouse
         <input
           className=" bg-blue-500"
