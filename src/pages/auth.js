@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import Web3 from 'web3';
 import styles from '../styles/auth.module.css';
-
+import { useRouter } from "next/router"
+import { userAgent } from 'next/server';
 
 const Auth = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [ethBalance, setEthBalance] = useState('');
-
+  const router = useRouter()
   const detectCurrentProvider = () => {
     let provider;
     if (window.ethereum) {
@@ -30,6 +31,8 @@ const Auth = () => {
         let ethBalance = await web3.eth.getBalance(account);
         setEthBalance(ethBalance);
         setIsConnected(true);
+        console.log()
+        router.push('/')
       }
     } catch (err) {
       console.log(err);

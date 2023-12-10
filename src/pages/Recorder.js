@@ -4,6 +4,7 @@ import lighthouse from "@lighthouse-web3/sdk";
 
 import { FaStop, FaPlay, FaPause } from "react-icons/fa";
 import { getGladiaTranscription } from "@/services/gladia";
+import Navbar from "@/components/Navbar";
 
 const mimeType = "audio/webm";
 
@@ -31,7 +32,6 @@ export default function Recorder() {
         );
       },
     };
-
     //const response = await axios.post("/api/lighthouse", formData, config);
   };
 
@@ -116,7 +116,31 @@ export default function Recorder() {
       100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
     console.log(percentageDone);
   };
-  const stopRecording = async () => {
+  
+  // ... existing code ...
+
+const stopRecording = async () => {
+  setRecordingStatus("inactive");
+  //stops the recording instance
+  mediaRecorder.current.stop();
+  mediaRecorder.current.onstop = async () => {
+    // creates a blob file from the audiochunks data
+    const audioBlob = new Blob(audioChunks, { type: "audio/mp3" });
+    
+    // Call the uploadFile function with the audio blob directly
+    uploadFile(audioBlob);
+
+    // Optional: Save the audio blob to local storage or set the audio state
+    window.localStorage.setItem("audio", audioBlob);
+    const audioUrl = URL.createObjectURL(audioBlob);
+    setAudio(audioUrl);
+    setAudioChunks([]);
+  };
+};
+
+// ... existing code ...
+
+  {/*const stopRecording = async () => {
     setRecordingStatus("inactive");
     //stops the recording instance
     mediaRecorder.current.stop();
@@ -130,9 +154,11 @@ export default function Recorder() {
       console.log(audioUrl);
       setAudioChunks([]);
     };
-  };
+  }; */}
 
   return (
+    <>
+    <Navbar />
     <div className="w-full flex flex-col justify-center items-center gap-4 bg-zenith-black rounded-t-md text-white">
       <p className="text-zenith-indigo text-2xl ">RECORDING DETAILS</p>
       <div className="h-1 w-1/5 bg-zenith-lav"></div>
@@ -176,14 +202,7 @@ export default function Recorder() {
           </div>
         ) : null}
       </div>
-      <button
-        onClick={() => {
-          saveAudio();
-        }}
-        className="bg-zenith-lav p-2"
-      >
-        Save Audio to Lighthouse
-      </button>
+      
       <div className="p-2  text-l">
         Upload File to Lighthouse:
         <input
@@ -192,6 +211,14 @@ export default function Recorder() {
           type="file"
         />
       </div>
+      <button
+        onClick={() => {
+          saveAudio();
+        }}
+        className="bg-zenith-lav p-2"
+      >
+        Save Audio to Lighthouse
+      </button>
       <p>
         {
           transcript?.choices?.map((choice)=>(
@@ -202,5 +229,6 @@ export default function Recorder() {
         }
       </p>
     </div>
+    </>
   );
 }
