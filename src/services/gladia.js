@@ -1,14 +1,14 @@
 import axios from "axios";
+
 import FormData from "form-data";
 
-import fs from "fs";
-
-export const getGladiaTranscription = async () => {
+export const getGladiaTranscription = async (audioUrl) => {
   const form = new FormData();
-  const audiofile = fs.createReadStream("./public/speech.mp3");
-  form.append("audio_file", audiofile);
+
+  form.append("audio_url", audioUrl);
   form.append("toggle_diarization", "true");
 
+  console.log(form);
   const response = await axios.post(
     "https://api.gladia.io/audio/text/audio-transcription/",
     form,

@@ -3,6 +3,7 @@ import axios from "axios";
 import lighthouse from "@lighthouse-web3/sdk";
 
 import { FaStop, FaPlay, FaPause } from "react-icons/fa";
+import { getGladiaTranscription } from "@/services/gladia";
 
 const mimeType = "audio/webm";
 
@@ -14,6 +15,7 @@ export default function Recorder() {
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState(null);
 
+  const [transcript, setTranscript] = useState(null);
   const saveAudio = async () => {
     console.log(audio);
 
@@ -31,15 +33,6 @@ export default function Recorder() {
     };
 
     //const response = await axios.post("/api/lighthouse", formData, config);
-    const response = await axios.post(
-      "/api/lighthouse",
-      {
-        fileUrl: audio,
-      },
-      config
-    );
-
-    console.log(response);
   };
 
   const getMicrophonePermission = async () => {
@@ -75,8 +68,8 @@ export default function Recorder() {
     };
     setAudioChunks(localAudioChunks);
   };
-const uploadFile = async(file) =>{
-  console.log(file)
+  const uploadFile = async (file) => {
+    console.log(file);
     // Push file to lighthouse node
     // Both file and folder are supported by upload function
     // Third parameter is for multiple files, if multiple files are to be uploaded at once make it true
@@ -88,7 +81,8 @@ const uploadFile = async(file) =>{
       null,
       progressCallback
     );
-    console.log('File Status:', output)
+    console.log("File Status:", output);
+
     /*
       output:
         data: {
@@ -99,9 +93,24 @@ const uploadFile = async(file) =>{
       Note: Hash in response is CID.
     */
 
-      console.log('Visit at https://gateway.lighthouse.storage/ipfs/' + output.data.Hash)
-  }
- 
+    console.log(
+      "Visit at https://gateway.lighthouse.storage/ipfs/" + output.data.Hash
+    );
+    console.log(
+      "Visit at https://gateway.lighthouse.storage/ipfs/" + output.data.Hash
+    );
+    const fileUrl =
+      "https://gateway.lighthouse.storage/ipfs/" + output.data.Hash;
+    console.log(fileUrl);
+    // const Printstate = result(fileUrl);
+    // console.log(Printstate);
+    const resin = await axios.post("/api/gladia", {
+      fileUrl: fileUrl,
+    });
+
+    setTranscript(JSON.stringify(resin));
+  };
+
   const progressCallback = (progressData) => {
     let percentageDone =
       100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
@@ -124,7 +133,7 @@ const uploadFile = async(file) =>{
   };
 
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-4 rounded-t-md text-white">
+    <div className="w-full flex flex-col justify-center items-center gap-4 bg-zenith-black rounded-t-md text-white">
       <p className="text-zenith-indigo text-2xl ">RECORDING DETAILS</p>   
       <div className="h-1 w-1/5 bg-zenith-lav"></div>
       <div className="flex flex-row gap-4 text-2xl pt-5">
@@ -170,9 +179,16 @@ const uploadFile = async(file) =>{
       >
         Save Audio to Lighthouse
       </button>
-      <div className="App">
-        <input onChange={(e) => uploadFile(e.target.files)} type="file" />
+      <div className="p-2  text-l">
+        Upload File to Lighthouse:
+        <input
+          className=" bg-blue-500"
+          onChange={(e) => uploadFile(e.target.files)}
+          type="file"
+        />
       </div>
+      Upload an audio file for general report
+      {transcript}
     </div>
   );
 }
