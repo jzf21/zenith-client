@@ -15,7 +15,7 @@ export default function Recorder() {
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState(null);
 
-  const [transcript, setTranscript] = useState(null);
+  const [transcript, setTranscript] = useState("Transcript");
   const saveAudio = async () => {
     console.log(audio);
 
@@ -107,8 +107,8 @@ export default function Recorder() {
     const resin = await axios.post("/api/gladia", {
       fileUrl: fileUrl,
     });
-
-    setTranscript(JSON.stringify(resin));
+    console.log(resin?.data?.nres);
+    setTranscript(JSON.parse(resin?.data?.nres));
   };
 
   const progressCallback = (progressData) => {
@@ -134,7 +134,7 @@ export default function Recorder() {
 
   return (
     <div className="w-full flex flex-col justify-center items-center gap-4 bg-zenith-black rounded-t-md text-white">
-      <p className="text-zenith-indigo text-2xl ">RECORDING DETAILS</p>   
+      <p className="text-zenith-indigo text-2xl ">RECORDING DETAILS</p>
       <div className="h-1 w-1/5 bg-zenith-lav"></div>
       <div className="flex flex-row gap-4 text-2xl pt-5">
         <button>
@@ -149,7 +149,11 @@ export default function Recorder() {
       </div>
       <div className="audio-controls">
         {!permission ? (
-          <button onClick={getMicrophonePermission} type="button" className="stroke-zenith-lav p-2">
+          <button
+            onClick={getMicrophonePermission}
+            type="button"
+            className="stroke-zenith-lav p-2"
+          >
             Get Microphone
           </button>
         ) : null}
@@ -175,7 +179,8 @@ export default function Recorder() {
       <button
         onClick={() => {
           saveAudio();
-        }} className="bg-zenith-lav p-2"
+        }}
+        className="bg-zenith-lav p-2"
       >
         Save Audio to Lighthouse
       </button>
@@ -187,8 +192,15 @@ export default function Recorder() {
           type="file"
         />
       </div>
-      Upload an audio file for general report
-      {transcript}
+      <p>
+        {
+          transcript?.choices?.map((choice)=>(
+            <div>
+            <p>{JSON.stringify(choice.message.content)}</p>
+            </div>
+          ))
+        }
+      </p>
     </div>
   );
 }
