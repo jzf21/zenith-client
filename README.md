@@ -1,3 +1,6 @@
+Link to Zenith Server Repo :https://github.com/jzf21/zenith-zerver
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
