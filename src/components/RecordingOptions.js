@@ -1,4 +1,4 @@
-// InfoSession.js
+// Recording Option.js
 import React from 'react';
 
 const ROption = () => {

@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Navbar() {
   return (
-    <div className="w-full h-14 fixed bg-zenith-lav text-white flex flex-row justify-center items-center gap-72">
+    <div className="w-full h-14 fixed bg-zenith-lav text-white flex flex-row justify-center items-center gap-72" style={{ zIndex: 100 }}>
       <div>
         <Link href="/">
         TEAM ZENITH

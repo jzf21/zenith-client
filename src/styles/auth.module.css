@@ -1,0 +1,44 @@
+/* auth.module.css */
+
+.login {
+  text-align: center;
+  margin: 50px;
+}
+
+.login_header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+}
+
+.login_wrapper {
+  margin-top: 20px;
+}
+
+.login_button__login,
+.login_buttons__logout {
+  background-color: #61dafb;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  margin: 5px;
+  border-radius: 5px; /* Add border-radius */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Add transition effect */
+}
+
+.login_button__login:hover,
+.login_buttons__logout:hover {
+  background-color: #4fa3d1;
+  transform: translateY(-2px); /* Add raised effect on hover */
+}
+
+.login_details {
+  margin-top: 20px;
+}
+
+.login_balance {
+  font-size: 18px;
+  margin-top: 10px;
+}
