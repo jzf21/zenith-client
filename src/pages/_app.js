@@ -1,6 +1,8 @@
 import "@/styles/globals.css";
 
 import { HuddleClient, HuddleProvider } from "@huddle01/react";
+import { MetaMaskProvider } from '@metamask/sdk-react';
+//import { MoralisProvider } from "react-moralis";
 
 const huddleClient = new HuddleClient({
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
@@ -14,7 +16,9 @@ const huddleClient = new HuddleClient({
 export default function App({ Component, pageProps }) {
   return (
     <HuddleProvider key="huddle01-provider" client={huddleClient}>
-      <Component {...pageProps} />
+      <MetaMaskProvider>
+          <Component {...pageProps} />
+      </MetaMaskProvider>
     </HuddleProvider>
   );
 }

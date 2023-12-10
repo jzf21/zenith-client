@@ -2,6 +2,7 @@ import DefaultLayout from "@/components/Layout";
 import Createroom from "@/components/Huddle/Createroom";
 import Sidebar from "@/components/Sidebar";
 import FocusArea from "@/components/FocusArea";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
